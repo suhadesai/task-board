@@ -108,6 +108,7 @@ export default function EditNoteModal({ isOpen, onClose, onSubmit, task }) {
               padding: '24px 24px 20px',
               boxShadow: '4px 8px 32px rgba(0,0,0,0.35), 0 2px 6px rgba(0,0,0,0.2)',
               fontFamily: "'Shadows Into Light', cursive",
+              fontWeight: 800,
               position: 'relative',
             }}
           >
@@ -119,21 +120,15 @@ export default function EditNoteModal({ isOpen, onClose, onSubmit, task }) {
               zIndex: 1,
             }} />
 
-            {/* Tape strip */}
-            <div style={{
-              position: 'absolute', top: -11, left: '50%', transform: 'translateX(-50%)',
-              width: 44, height: 20, background: 'rgba(255,255,255,0.4)',
-              borderRadius: 2, pointerEvents: 'none',
-            }} />
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
-              <span style={{ fontSize: 24, fontWeight: 700, color: '#1a1a1a', fontFamily: "'Shadows Into Light', cursive" }}>
+              <span style={{ fontSize: 30, fontWeight: 800, color: '#1a1a1a', fontFamily: "'Shadows Into Light', cursive" }}>
                 Edit note
               </span>
               <button
                 onClick={onClose}
                 style={{
-                  background: 'none', border: 'none', fontSize: 22,
+                  background: 'none', border: 'none', fontSize: 24, fontWeight: 800,
                   cursor: 'pointer', color: 'rgba(0,0,0,0.35)',
                   lineHeight: 1, padding: '0 2px', borderRadius: 4,
                   fontFamily: "'Shadows Into Light', cursive", transition: 'color .15s',
@@ -213,7 +208,7 @@ function Field({ label, children }) {
     <div style={{ marginBottom: 13 }}>
       <label style={{
         display: 'block', fontFamily: "'Shadows Into Light', cursive",
-        fontSize: 15, fontWeight: 700, color: '#333', marginBottom: 3,
+        fontSize: 20, fontWeight: 800, color: '#333', marginBottom: 3,
       }}>
         {label}
       </label>
@@ -247,7 +242,8 @@ const inputBase = {
   borderBottom: '2px solid rgba(0,0,0,0.2)',
   background: 'transparent',
   fontFamily: "'Shadows Into Light', cursive",
-  fontSize: 15,
+  fontSize: 18,
+  fontWeight: 800,
   color: '#1a1a1a',
   padding: '4px 0',
   outline: 'none',
@@ -256,8 +252,8 @@ const inputBase = {
 
 const btnBase = {
   fontFamily: "'Shadows Into Light', cursive",
-  fontSize: 17,
-  fontWeight: 700,
+  fontSize: 18,
+  fontWeight: 800,
   padding: '8px 22px',
   borderRadius: 6,
   cursor: 'pointer',

@@ -6,6 +6,7 @@ import EditNoteModal from './EditNoteModal';
 const NOTE_COLORS = [
   { bg: '#fef08a', shadow: '#d4b800' },
   { bg: '#bfdbfe', shadow: '#3b82f6' },
+  { bg: '#bbf7d0', shadow: '#22c55e' },
   { bg: '#f5d0fe', shadow: '#a855f7' },
   { bg: '#fed7aa', shadow: '#f97316' },
 ];
@@ -171,19 +172,7 @@ function StickyNote({ task, isDragging, onDelete, onEdit, onDragStart, onDragEnd
         )}
       </div>
 
-      {/* Tape strip */}
-      <div style={{
-        position: 'absolute', 
-        top: -10, 
-        left: '50%', 
-        transform: 'translateX(-50%)',
-        width: 40, 
-        height: 18, 
-        background: 'rgba(255,255,255,.45)',
-        borderRadius: 2, 
-        pointerEvents: 'none', 
-        zIndex: 0,
-      }} aria-hidden="true" />
+
     </div>
   );
 }
@@ -257,35 +246,21 @@ export default function KanbanBoard({
   useEffect(() => {
     const timer = setTimeout(() => {
       const headers = columns.map(c => headerRefs.current[c.id]).filter(Boolean);
-      const allCards = Object.values(cardRefs.current).filter(Boolean);
-
       if (headers.length > 0) {
         gsap.set(headers, { scale: 0, transformOrigin: '50% 50%' });
         headers.forEach((el, i) => {
-          gsap.to(el, { 
-            scale: 1, 
-            duration: animationDuration, 
-            ease: animationEase, 
-            delay: i * staggerDelay 
+          gsap.to(el, {
+            scale: 1,
+            duration: animationDuration,
+            ease: animationEase,
+            delay: i * staggerDelay,
           });
         });
       }
-
-      if (allCards.length > 0) {
-        gsap.set(allCards, { y: 20, autoAlpha: 0 });
-        gsap.to(allCards, {
-          y: 0, 
-          autoAlpha: 1,
-          duration: animationDuration * 0.85,
-          ease: 'power3.out',
-          stagger: staggerDelay * 0.6,
-          delay: columns.length * staggerDelay * 0.5,
-        });
-      }
     }, 100);
-
     return () => clearTimeout(timer);
-  }, [columns, animationDuration, animationEase, staggerDelay, cards.length]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
 
 
