@@ -9,6 +9,7 @@ export default function Navbar({
   isGuest = false,
   taskCount = 0,
   doneCount = 0,
+  overdueCount = 0,
   className = '',
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -43,10 +44,45 @@ export default function Navbar({
         <div className="navbar-divider" />
 
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', padding: '0 0.75rem' }}>
-          <span className="navbar-stats-text">
-            {doneCount}/{taskCount} done
-            {isGuest && <span style={{ marginLeft: '0.5rem', fontSize: '0.65rem', opacity: 0.6 }}>(Guest)</span>}
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 3, minWidth: 80 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.45)', fontFamily: 'Playfair Display, sans-serif', letterSpacing: '0.04em' }}>
+                  progress
+                </span>
+                <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.7)', fontFamily: 'Playfair Display, sans-serif' }}>
+                  {doneCount}/{taskCount}
+                </span>
+              </div>
+              <div style={{ height: 3, borderRadius: 999, background: 'rgba(255,255,255,0.1)', overflow: 'hidden', width: 80 }}>
+                <div style={{
+                  height: '100%',
+                  borderRadius: 999,
+                  background: 'linear-gradient(90deg, #588157, #A3B18A)',
+                  width: taskCount > 0 ? `${Math.round((doneCount / taskCount) * 100)}%` : '0%',
+                  transition: 'width 0.4s ease',
+                }} />
+              </div>
+            </div>
+
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: 4,
+              fontSize: '0.65rem', fontFamily: 'Playfair Display, sans-serif',
+              background: overdueCount > 0 ? 'rgba(231,76,60,0.2)' : 'rgba(88,129,87,0.25)',
+              color: overdueCount > 0 ? '#ff8a80' : '#A3B18A',
+              border: `1px solid ${overdueCount > 0 ? 'rgba(231,76,60,0.35)' : 'rgba(88,129,87,0.4)'}`,
+              borderRadius: 999, padding: '2px 7px',
+              transition: 'all 0.3s ease',
+            }}>
+              {overdueCount > 0 ? '⚠' : '✓'} {overdueCount} overdue
+            </span>
+
+            {isGuest && (
+              <span style={{ fontSize: '0.65rem', opacity: 0.5, color: 'rgba(255,255,255,0.6)', fontFamily: 'Playfair Display, sans-serif' }}>
+                Guest
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="navbar-divider" />

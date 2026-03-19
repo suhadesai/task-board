@@ -29,9 +29,13 @@ function formatDate(dateStr) {
   return `${+m}/${+d}`;
 }
 
-function isOverdue(dateStr, colId) {
-  if (!dateStr || colId === 'done') return false;
-  return new Date(dateStr) < new Date(new Date().toDateString());
+function getDueUrgency(dateStr, colId) {
+  if (!dateStr || colId === 'done') return null;
+  const today = new Date().toISOString().split('T')[0];
+  if (dateStr < today) return 'overdue';
+  const diffDays = Math.round((new Date(dateStr) - new Date(today)) / (1000 * 60 * 60 * 24));
+  if (diffDays <= 2) return 'soon';
+  return 'upcoming';
 }
 
 function StickyNote({ task, isDragging, onDelete, onEdit, onDragStart, onDragEnd }) {
@@ -40,9 +44,16 @@ function StickyNote({ task, isDragging, onDelete, onEdit, onDragStart, onDragEnd
 
   const color = NOTE_COLORS[task.colorIndex % NOTE_COLORS.length];
   const pinColor = PIN_COLORS[task.pinIndex % PIN_COLORS.length];
-  const overdue = isOverdue(task.due, task.colId);
+  const urgency = getDueUrgency(task.due, task.colId);
   const formattedDue = formatDate(task.due);
   const rotation = rotationRef.current;
+
+  const urgencyStyles = {
+    overdue: { bg: '#fde8e8', color: '#c0392b', border: '#e74c3c', icon: '⚠', label: 'Overdue' },
+    soon:    { bg: '#fef3cd', color: '#92400e', border: '#f39c12', icon: '◷', label: 'Due soon' },
+    upcoming:{ bg: 'rgba(0,0,0,0.07)', color: '#444', border: 'transparent', icon: '', label: '' },
+  };
+  const us = urgency ? urgencyStyles[urgency] : null;
 
   const handleDragStart = useCallback((e) => {
     e.dataTransfer.effectAllowed = 'move';
@@ -141,33 +152,39 @@ function StickyNote({ task, isDragging, onDelete, onEdit, onDragStart, onDragEnd
         }}>{task.desc}</p>
       )}
 
-      <div style={{ 
-        position: 'absolute', 
-        bottom: 7, 
-        right: 10, 
-        display: 'flex', 
-        alignItems: 'center', 
-        gap: 5 
+      <div style={{
+        position: 'absolute',
+        bottom: 6,
+        left: 10,
+        right: 10,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
       }}>
-        <span 
-          title={PRIORITY_LABELS[task.priority]} 
+        <span
+          title={PRIORITY_LABELS[task.priority]}
           style={{
-            width: 8, 
-            height: 8, 
+            width: 7,
+            height: 7,
             borderRadius: '50%',
             background: PRIORITY_COLORS[task.priority] ?? '#888',
-            border: '1.5px solid rgba(0,0,0,.18)', 
+            border: '1.5px solid rgba(0,0,0,.18)',
             flexShrink: 0,
-          }} 
+          }}
         />
         {formattedDue && (
-          <span style={{ 
-            fontSize: 12, 
-            fontWeight: overdue ? 700 : 500, 
-            color: overdue ? '#c0392b' : '#555', 
-            fontFamily: 'sans-serif' 
+          <span style={{
+            fontSize: 15,
+            fontFamily: HANDWRITTEN ,
+            fontWeight: urgency === 'overdue' || urgency === 'soon' ? 2000 : 900,
+            color: urgency === 'overdue' ? 'red' : urgency === 'soon' ? 'maroon' : '#666',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 3,
           }}>
-            {formattedDue}{overdue ? ' ⚠' : ''}
+            {urgency === 'overdue' && <span>⚠</span>}
+            {urgency === 'soon' && <span>◷</span>}
+            {formattedDue}
           </span>
         )}
       </div>
@@ -242,6 +259,7 @@ export default function KanbanBoard({
     setToast({ message, type });
     setTimeout(() => setToast(null), ms);
   }, []);
+
 
   useEffect(() => {
     const timer = setTimeout(() => {

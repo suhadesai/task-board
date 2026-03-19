@@ -26,6 +26,7 @@ export default function AddNoteModal({ isOpen, onClose, onSubmit, defaultCol = '
   useEffect(() => {
     if (isOpen) {
       setColorIndex(Math.floor(Math.random() * NOTE_COLORS.length));
+      setDue(new Date().toISOString().split('T')[0]);
       setTimeout(() => titleRef.current?.focus(), 80);
     } else {
       setTitle(''); setDesc(''); setPriority('medium'); setDue('');
@@ -255,3 +256,5 @@ const btnBase = {
 
 const cancelStyle = { background: '#ddd', color: '#333' };
 const submitStyle = { background: '#e74c3c', color: 'white' };
+
+

@@ -131,8 +131,8 @@ function App() {
       due: data.due_date,
       user_id: data.user_id,
       created_at: data.created_at,
-      colorIndex: task.colorIndex,
-      pinIndex: task.pinIndex
+      colorIndex: Math.floor(Math.random() * 4),
+      pinIndex: Math.floor(Math.random() * 5)
     };
     
     setTasks(prev => [...prev, newTask]);
@@ -280,9 +280,14 @@ function App() {
       <Navbar
         onAddNote={() => handleOpenModal('to-do')}
         onSignOut={handleSignOut}
-        isGuest={user?.is_anonymous || false} 
+        isGuest={user?.is_anonymous || false}
         taskCount={tasks.length}
         doneCount={tasks.filter(t => t.colId === 'done').length}
+        overdueCount={tasks.filter(t => {
+          if (!t.due || t.colId === 'done') return false;
+          const today = new Date().toISOString().split('T')[0];
+          return t.due < today;
+        }).length}
       />
 
       <div style={{ position: 'relative', zIndex: 1, paddingTop: '5rem', minHeight: '100vh' }}>
