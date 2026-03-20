@@ -154,9 +154,11 @@ function StickyNote({ task, isDragging, onDelete, onEdit, onDragStart, onDragEnd
 
       <div style={{
         position: 'absolute',
-        bottom: 6,
+        bottom: 7,
         left: 10,
         right: 10,
+        bottom: 7, 
+        gap: 5,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -164,8 +166,8 @@ function StickyNote({ task, isDragging, onDelete, onEdit, onDragStart, onDragEnd
         <span
           title={PRIORITY_LABELS[task.priority]}
           style={{
-            width: 7,
-            height: 7,
+            width: 8,
+            height: 8,
             borderRadius: '50%',
             background: PRIORITY_COLORS[task.priority] ?? '#888',
             border: '1.5px solid rgba(0,0,0,.18)',

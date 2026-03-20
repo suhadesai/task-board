@@ -131,8 +131,8 @@ function App() {
       due: data.due_date,
       user_id: data.user_id,
       created_at: data.created_at,
-      colorIndex: Math.floor(Math.random() * 4),
-      pinIndex: Math.floor(Math.random() * 5)
+      colorIndex: task.colorIndex,
+      pinIndex: task.pinIndex
     };
     
     setTasks(prev => [...prev, newTask]);
